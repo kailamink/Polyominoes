@@ -9,6 +9,7 @@ namespace Polyominoes
     static class Program
     {
         // TODO --> Build out implementation of algorithm :)
+        //test comment
         [STAThread]
         static void Main()
         {
