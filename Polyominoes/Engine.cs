@@ -1,58 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Polyominoes
 {
     class Engine
     {
         private Board board;
-        private List<Polyominoe> yellowKids;
-        private List<Polyominoe> redKids;
-        private List<Polyominoe> blueKids;
-        private List<Polyominoe> greenKids;
 
-        private List<List<Polyominoe>> allChildren;
+        private List<List<Polyominoe>> allPermutations = new List<List<Polyominoe>>();
 
-        Stack<Polyominoe> optionStack = new Stack<Polyominoe>();
-
-        List<Polyominoe> solution = new List<Polyominoe>();
+        private Stack<Polyominoe> optionStack = new Stack<Polyominoe>();
+        private Polyominoe lastAdded;
 
         public Engine(Board board, 
-            List<Polyominoe> yellowKids, 
-            List<Polyominoe> redKids, 
-            List<Polyominoe> blueKids, 
-            List<Polyominoe> greenKids)
+            List<Polyominoe> yellowPerms, 
+            List<Polyominoe> redPerms, 
+            List<Polyominoe> bluePerms, 
+            List<Polyominoe> greenPerms)
         {
             this.board = board;
-            this.yellowKids = yellowKids;
-            this.redKids = redKids;
-            this.blueKids = blueKids;
-            this.greenKids = greenKids;
+            allPermutations.Add(yellowPerms);
+            allPermutations.Add(redPerms);
+            allPermutations.Add(bluePerms);
+            allPermutations.Add(greenPerms);
         }
 
-        public void Traverse(int colorIx)
+        public bool Solve()
         {
-            // make sure colorIx is in bounds - if it's greater - we won!
-            // fill up solution (and return it?)
-           
-            foreach (Polyominoe child in allChildren[colorIx]) //get the color we're up to
+            return Solve(0);
+        }
+
+        private bool Solve(int colorIx)
+        {
+            if (colorIx == allPermutations.Count)
             {
-                optionStack.Push(child); //push all the kids of this color onto our stack
+                return true;
+            }
+            
+            foreach (Polyominoe permutation in allPermutations[colorIx])
+            {
+                optionStack.Push(permutation);
             }
 
             Polyominoe current = optionStack.Pop();
+            Color currentColor = current.color;
+            int layersChanged = 0;
 
-            while (!board.isValid(current)) //somebody's gotta write this method
+            while (!board.isValid(current))
             {
-                current = optionStack.Pop(); //no good try the next kid
+                if (optionStack.Count == 0)
+                {
+                    return false;
+                }
+                current = optionStack.Pop(); 
+                if (current.color != currentColor)
+                {
+                    layersChanged++;
+                    currentColor = current.color;
+                    board.remove(lastAdded);
+                }
             }
-            // keep track of how many kids were popped. If number of popped kids is 
-            // greater than the number of kids for that color, colorIx--
 
-            Traverse(colorIx + 1); //this guy works, try next piece
+            board.add(current);
+            lastAdded = current;
+            
+            return Solve(colorIx - layersChanged + 1);
         }
     }
 }
