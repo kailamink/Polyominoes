@@ -16,6 +16,8 @@ namespace Polyominoes
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new PolyominoeForm());
+            
+
         }
     }
 }

@@ -6,16 +6,21 @@ using System.Threading.Tasks;
 
 namespace Polyominoes
 {
+
+    public enum Colors {NONE = 0, YELLOW, RED, BLUE, GREEN};
+
     class Polyominoe
     {
-        protected List<Squarie> polyominoe;
+        public List<Squarie> Squaries { get; private set; }
+        public Colors Color { get; private set; }
 
-        public Polyominoe(int[,] squares)
+        public Polyominoe(int[,] squares, Colors color)
         {
-            polyominoe = new List<Squarie>();
+            Color = color;
+            Squaries = new List<Squarie>();
             for (int ordinal = 0; ordinal < squares.Length; ++ordinal)
             {
-                polyominoe.Add(new Squarie(squares[ordinal,0], squares[ordinal,1]));
+                Squaries.Add(new Squarie(squares[ordinal,0], squares[ordinal,1]));
             }
         }
 
@@ -28,7 +33,7 @@ namespace Polyominoes
          */
         public void Translate(int x, int y)
         {
-            foreach(Squarie sqr in polyominoe)
+            foreach(Squarie sqr in Squaries)
             {
                 sqr.Translate(x, y);
             }
@@ -39,7 +44,7 @@ namespace Polyominoes
          */
         public void Rotate90()
         {
-            foreach (Squarie sqr in polyominoe)
+            foreach (Squarie sqr in Squaries)
             {
                 sqr.Rotate90();
             }
@@ -50,7 +55,7 @@ namespace Polyominoes
         public override string ToString()
         {
             string strRV = "{ ";
-            foreach (Squarie sqr in polyominoe)
+            foreach (Squarie sqr in Squaries)
             {
                 strRV += sqr.ToString();
             }

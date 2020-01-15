@@ -8,8 +8,8 @@ namespace Polyominoes
 {
     class Squarie
     {
-        private int Row { get; set; }
-        private int Col { get; set; }
+        public int Row { get; private set; }
+        public int Col { get; private set; }
 
         public Squarie(int row, int col)
         {

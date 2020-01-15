@@ -42,25 +42,25 @@ namespace Polyominoes
             }
 
             Polyominoe current = optionStack.Pop();
-            Color currentColor = current.color;
+            Colors currentColor = current.Color;
             int layersChanged = 0;
 
-            while (!board.isValid(current))
+            while (!board.IsValid(current))
             {
                 if (optionStack.Count == 0)
                 {
                     return false;
                 }
                 current = optionStack.Pop(); 
-                if (current.color != currentColor)
+                if (current.Color != currentColor)
                 {
                     layersChanged++;
-                    currentColor = current.color;
-                    board.remove(lastAdded);
+                    currentColor = current.Color;
+                    board.Remove(lastAdded);
                 }
             }
 
-            board.add(current);
+            board.Add(current);
             lastAdded = current;
             
             return Solve(colorIx - layersChanged + 1);
